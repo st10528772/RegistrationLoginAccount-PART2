@@ -1,6 +1,7 @@
 package registrationloginaccount;
 
 import java.util.Random;
+import java.util.ArrayList;
 
 /**
  * Message class for QuickChat (Part 2). Holds the details of one chat message.
@@ -12,6 +13,10 @@ public class Message {
     private String recipient;
     private String messageText;
     private String messageHash;
+
+    // Shared by every message while the program is running
+    private static ArrayList<Message> sentMessages = new ArrayList<>();
+    private static int totalMessages = 0;
 
     public Message(int messageNumber, String recipient, String messageText) {
         this.messageNumber = messageNumber;
@@ -105,6 +110,36 @@ public class Message {
             return "Message ready to send.";
         }
         return "Message exceeds 250 characters by " + (length - 250) + "; please reduce the size.";
+    }
+
+    /**
+     * Returns the full details of this message in the required order: Message
+     * ID, Message Hash, Recipient, Message.
+     */
+    public String getMessageDetails() {
+        return "Message ID: " + messageID + "\n"
+                + "Message Hash: " + messageHash + "\n"
+                + "Recipient: " + recipient + "\n"
+                + "Message: " + messageText;
+    }
+
+    /**
+     * Returns all the messages sent while the program is running.
+     */
+    public static String printMessages() {
+        String allMessages = "";
+
+        for (int i = 0; i < sentMessages.size(); i++) {
+            allMessages = allMessages + sentMessages.get(i).getMessageDetails() + "\n\n";
+        }
+        return allMessages;
+    }
+
+    /**
+     * Returns the total number of messages sent.
+     */
+    public static int returnTotalMessages() {
+        return totalMessages;
     }
 
 }

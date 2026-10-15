@@ -78,14 +78,56 @@ public class RegistrationLoginAccount {
             System.out.println("Enter your password:");
             String enteredPassword = inputDevice.nextLine();
 
-            user.loginUser(enteredUserName, enteredPassword);
+            boolean loggedIn = user.loginUser(enteredUserName, enteredPassword);
 
             System.out.println(user.returnLoginStatus());
+
+            if (loggedIn) {
+                runQuickChat(inputDevice);
+            }
         } else {
             System.out.println();
             System.out.println("Registration failed. Please try again");
         }
 
         inputDevice.close();
+    }
+
+    // Asks for a whole number and keeps asking until the user types one
+    private static int readInt(Scanner inputDevice, String prompt) {
+        while (true) {
+            System.out.println(prompt);
+            String line = inputDevice.nextLine().trim();
+            try {
+                return Integer.parseInt(line);
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter a whole number.");
+            }
+        }
+    }
+
+    // QuickChat menu, only reached after a successful login
+    private static void runQuickChat(Scanner inputDevice) {
+        System.out.println();
+        System.out.println("Welcome to QuickChat.");
+
+        int choice = 0;
+        while (choice != 3) {
+            System.out.println();
+            System.out.println("1) Send Messages");
+            System.out.println("2) Show recently sent messages");
+            System.out.println("3) Quit");
+            choice = readInt(inputDevice, "Choose an option:");
+
+            if (choice == 1) {
+                System.out.println("Sending messages is coming next.");
+            } else if (choice == 2) {
+                System.out.println("Coming Soon.");
+            } else if (choice == 3) {
+                System.out.println("Goodbye.");
+            } else {
+                System.out.println("Invalid option. Please choose 1, 2 or 3.");
+            }
+        }
     }
 }

@@ -94,4 +94,17 @@ public class Message {
         return messageHash;
     }
 
+    /**
+     * Checks that the message is no more than 250 characters. If it is too
+     * long, says by how many characters.
+     */
+    public String checkMessageLength() {
+        int length = messageText.length();
+
+        if (length <= 250) {
+            return "Message ready to send.";
+        }
+        return "Message exceeds 250 characters by " + (length - 250) + "; please reduce the size.";
+    }
+
 }

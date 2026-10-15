@@ -64,4 +64,15 @@ public class Message {
     public boolean checkMessageID() {
         return messageID.length() > 0 && messageID.length() <= 10;
     }
+    /**
+     * Checks the recipient's cell number by reusing the Part 1 check
+     * (international code +27 followed by nine digits).
+     */
+    public String checkRecipientCell() {
+        if (Login.checkCellPhoneNumber(recipient)) {
+            return "Cell phone number successfully captured.";
+        }
+        return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
+    }
+    
 }

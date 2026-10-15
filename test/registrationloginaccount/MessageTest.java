@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 public class MessageTest {
 
     // ---------- Message length ----------
-
     @Test
     public void testMessageLengthSuccess() {
         Message m = new Message(0, "+27718693002", "Hi Mike, can you join us for dinner tonight?");
@@ -32,7 +31,6 @@ public class MessageTest {
     }
 
     // ---------- Recipient cell number ----------
-
     @Test
     public void testRecipientCellSuccess() {
         Message m = new Message(0, "+27718693002", "Hi Mike, can you join us for dinner tonight?");

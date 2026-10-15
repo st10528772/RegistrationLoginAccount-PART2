@@ -110,6 +110,11 @@ public class RegistrationLoginAccount {
     private static void runQuickChat(Scanner inputDevice) {
         System.out.println();
         System.out.println("Welcome to QuickChat.");
+        int howMany = 0;
+        while (howMany < 1) {
+            howMany = readInt(inputDevice, "How many messages do you wish to enter?");
+        }
+        boolean messagesDone = false;
 
         int choice = 0;
         while (choice != 3) {
@@ -120,7 +125,12 @@ public class RegistrationLoginAccount {
             choice = readInt(inputDevice, "Choose an option:");
 
             if (choice == 1) {
-                System.out.println("Sending messages is coming next.");
+                if (messagesDone) {
+                    System.out.println("You have already entered all your messages.");
+                } else {
+                    sendMessages(inputDevice, howMany);
+                    messagesDone = true;
+                }
             } else if (choice == 2) {
                 System.out.println("Coming Soon.");
             } else if (choice == 3) {
@@ -129,5 +139,64 @@ public class RegistrationLoginAccount {
                 System.out.println("Invalid option. Please choose 1, 2 or 3.");
             }
         }
+    }
+    // A for loop lets the user enter exactly the number of messages they chose
+
+    private static void sendMessages(Scanner inputDevice, int howMany) {
+        for (int i = 0; i < howMany; i++) {
+            System.out.println();
+            System.out.println("Message " + (i + 1) + " of " + howMany);
+
+            // Recipient: keep asking until the cell number is valid
+            String recipient;
+            while (true) {
+                System.out.println("Enter the recipient's cell number:");
+                recipient = inputDevice.nextLine().trim();
+
+                Message check = new Message(i, recipient, "");
+                System.out.println(check.checkRecipientCell());
+
+                if (Login.checkCellPhoneNumber(recipient)) {
+                    break;
+                }
+            }
+
+            // Message text: keep asking until it is 250 characters or fewer
+            String text;
+            Message message;
+            while (true) {
+                System.out.println("Enter your message:");
+                text = inputDevice.nextLine();
+
+                message = new Message(i, recipient, text);
+                System.out.println(message.checkMessageLength());
+
+                if (text.length() <= 250) {
+                    break;
+                }
+            }
+
+            System.out.println(message.createMessageID());
+            System.out.println("Message Hash: " + message.createMessageHash());
+
+            // What to do with the message
+            int choice = 0;
+            while (choice < 1 || choice > 3) {
+                System.out.println("1) Send Message");
+                System.out.println("2) Disregard Message");
+                System.out.println("3) Store Message to send later");
+                choice = readInt(inputDevice, "Choose an option:");
+            }
+
+            System.out.println(message.sentMessage(choice));
+
+            if (choice == 1) {
+                System.out.println();
+                System.out.println(message.getMessageDetails());
+            }
+        }
+
+        System.out.println();
+        System.out.println("Total messages sent: " + Message.returnTotalMessages());
     }
 }

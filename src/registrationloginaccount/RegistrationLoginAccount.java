@@ -62,14 +62,13 @@ public class RegistrationLoginAccount {
 
         // Creating the Login object
         Login user = new Login(userName, password, cellPhoneNumber, firstName, lastName);
-
         // Register using registerUser()
         System.out.println();
         String registrationMessage = user.registerUser();
         System.out.println(registrationMessage);
 
         // Allowing login in case registration was successful
-        if (registrationMessage.equals("User  registered successfully.")) {
+        if (registrationMessage.equals("User registered successfully.")) {
             System.out.println();
             System.out.println("LOGIN");
 

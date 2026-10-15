@@ -183,4 +183,21 @@ public class Message {
         }
     }
 
+    /**
+     * Handles what the user chose to do with the message: 1 = send, 2 =
+     * disregard, 3 = store to send later.
+     */
+    public String sentMessage(int choice) {
+        if (choice == 1) {
+            sentMessages.add(this);
+            totalMessages++;
+            return "Message successfully sent.";
+        } else if (choice == 2) {
+            return "Press 0 to delete the message.";
+        } else if (choice == 3) {
+            return storeMessage();
+        }
+        return "Invalid option. Please choose 1, 2 or 3.";
+    }
+
 }

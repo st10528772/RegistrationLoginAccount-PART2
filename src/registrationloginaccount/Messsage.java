@@ -2,6 +2,12 @@ package registrationloginaccount;
 
 import java.util.Random;
 import java.util.ArrayList;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Message class for QuickChat (Part 2). Holds the details of one chat message.
@@ -17,6 +23,7 @@ public class Message {
     // Shared by every message while the program is running
     private static ArrayList<Message> sentMessages = new ArrayList<>();
     private static int totalMessages = 0;
+    private static final String STORAGE_FILE = "storedMessages.json";
 
     public Message(int messageNumber, String recipient, String messageText) {
         this.messageNumber = messageNumber;
@@ -140,6 +147,40 @@ public class Message {
      */
     public static int returnTotalMessages() {
         return totalMessages;
+    }
+
+    /**
+     * Saves this message to a JSON file. Messages already in the file are kept.
+     * Gson usage based on the Gson User Guide [1].
+     */
+    // [1] Google, "Gson User Guide," GitHub. [Online]. Available:
+    //     https://github.com/google/gson/blob/main/UserGuide.md [Accessed: Oct. 15, 2026].
+    public String storeMessage() {
+        ArrayList<Message> storedMessages = new ArrayList<>();
+        File file = new File(STORAGE_FILE);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try {
+            if (file.exists()) {
+                try (FileReader reader = new FileReader(file)) {
+                    Message[] existing = gson.fromJson(reader, Message[].class);
+                    if (existing != null) {
+                        for (int i = 0; i < existing.length; i++) {
+                            storedMessages.add(existing[i]);
+                        }
+                    }
+                }
+            }
+
+            storedMessages.add(this);
+
+            try (FileWriter writer = new FileWriter(file)) {
+                gson.toJson(storedMessages, writer);
+            }
+            return "Message successfully stored.";
+        } catch (IOException e) {
+            return "Message could not be stored: " + e.getMessage();
+        }
     }
 
 }

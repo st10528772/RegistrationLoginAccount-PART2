@@ -3,8 +3,7 @@ package registrationloginaccount;
 import java.util.Random;
 
 /**
- * Message class for QuickChat (Part 2).
- * Holds the details of one chat message.
+ * Message class for QuickChat (Part 2). Holds the details of one chat message.
  */
 public class Message {
 
@@ -41,10 +40,10 @@ public class Message {
     public String getMessageHash() {
         return messageHash;
     }
-    
+
     /**
-     * Creates a random ten-digit message ID, one digit at a time,
-     * and returns the confirmation text.
+     * Creates a random ten-digit message ID, one digit at a time, and returns
+     * the confirmation text.
      */
     public String createMessageID() {
         Random random = new Random();
@@ -59,11 +58,13 @@ public class Message {
     }
 
     /**
-     * Checks that the message ID is not empty and is no more than ten characters.
+     * Checks that the message ID is not empty and is no more than ten
+     * characters.
      */
     public boolean checkMessageID() {
         return messageID.length() > 0 && messageID.length() <= 10;
     }
+
     /**
      * Checks the recipient's cell number by reusing the Part 1 check
      * (international code +27 followed by nine digits).
@@ -74,5 +75,23 @@ public class Message {
         }
         return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
     }
-    
+
+    /**
+     * Builds the message hash: first two digits of the ID, the message number,
+     * then the first and last words of the message, all in capital letters.
+     */
+    public String createMessageHash() {
+        if (messageID.length() < 2 || messageText.trim().isEmpty()) {
+            return "";
+        }
+
+        String[] words = messageText.trim().split("\\s+");
+        String firstWord = words[0].replaceAll("[^A-Za-z0-9]", "");
+        String lastWord = words[words.length - 1].replaceAll("[^A-Za-z0-9]", "");
+        String idStart = messageID.substring(0, 2);
+
+        messageHash = (idStart + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
+        return messageHash;
+    }
+
 }

@@ -37,6 +37,11 @@ public class Message {
         return messageID;
     }
 
+    // Lets a unit test set a known message ID
+    public void setMessageID(String messageID) {
+        this.messageID = messageID;
+    }
+
     public int getMessageNumber() {
         return messageNumber;
     }

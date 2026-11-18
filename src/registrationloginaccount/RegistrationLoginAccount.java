@@ -110,6 +110,7 @@ public class RegistrationLoginAccount {
     private static void runQuickChat(Scanner inputDevice) {
         System.out.println();
         System.out.println("Welcome to QuickChat.");
+        Message.loadStoredMessages(); // read the JSON file into the stored array
         int howMany = 0;
         while (howMany < 1) {
             howMany = readInt(inputDevice, "How many messages do you wish to enter?");

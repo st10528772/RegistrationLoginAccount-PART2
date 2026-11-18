@@ -20,8 +20,13 @@ public class Message {
     private String messageText;
     private String messageHash;
 
-    // Shared by every message while the program is running
+    // Shared by every message while the program is running.
+    // These arrays are filled while the program runs (nothing is hard-coded).
     private static ArrayList<Message> sentMessages = new ArrayList<>();
+    private static ArrayList<Message> disregardedMessages = new ArrayList<>();
+    private static ArrayList<Message> storedMessages = new ArrayList<>();
+    private static ArrayList<String> messageHashes = new ArrayList<>();
+    private static ArrayList<String> messageIDs = new ArrayList<>();
     private static int totalMessages = 0;
     private static final String STORAGE_FILE = "storedMessages.json";
 
@@ -190,14 +195,18 @@ public class Message {
 
     /**
      * Handles what the user chose to do with the message: 1 = send, 2 =
-     * disregard, 3 = store to send later.
+     * disregard, 3 = store to send later. The message is also added to the
+     * matching array.
      */
     public String sentMessage(int choice) {
         if (choice == 1) {
             sentMessages.add(this);
             totalMessages++;
+            recordIdentifiers();
             return "Message successfully sent.";
         } else if (choice == 2) {
+            disregardedMessages.add(this);
+            recordIdentifiers();
             return "Press 0 to delete the message.";
         } else if (choice == 3) {
             return storeMessage();
@@ -205,4 +214,29 @@ public class Message {
         return "Invalid option. Please choose 1, 2 or 3.";
     }
 
+    /**
+     * Adds this message's ID and hash to the Message ID and Message Hash
+     * arrays. Empty values and duplicates are skipped.
+     */
+    private void recordIdentifiers() {
+        if (!messageID.isEmpty() && !messageIDs.contains(messageID)) {
+            messageIDs.add(messageID);
+        }
+        if (!messageHash.isEmpty() && !messageHashes.contains(messageHash)) {
+            messageHashes.add(messageHash);
+        }
+    }
+
+    /**
+     * Empties every array and resets the message counter. Used by the unit
+     * tests so each test starts from a clean state.
+     */
+    public static void clearAll() {
+        sentMessages.clear();
+        disregardedMessages.clear();
+        storedMessages.clear();
+        messageHashes.clear();
+        messageIDs.clear();
+        totalMessages = 0;
+    }
 }

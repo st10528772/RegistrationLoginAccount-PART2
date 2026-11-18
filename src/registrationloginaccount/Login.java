@@ -7,6 +7,7 @@ package registrationloginaccount;
 import java.util.regex.Pattern;
 
 public class Login {
+
     private String firstName;
     private String lastName;
     private String userName;
@@ -21,6 +22,10 @@ public class Login {
         this.firstName = firstName;
         this.lastName = lastName;
         this.loginSuccessful = false;
+    }
+
+    public String getCellPhoneNumber() {
+        return cellPhoneNumber;
     }
 
     // Static validation helpers

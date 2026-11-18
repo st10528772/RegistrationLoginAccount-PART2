@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: registrationloginaccount.LoginTest
 -------------------------------------------------------------------------------
-Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.170 s -- in registrationloginaccount.LoginTest
+Tests run: 23, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.102 s -- in registrationloginaccount.LoginTest

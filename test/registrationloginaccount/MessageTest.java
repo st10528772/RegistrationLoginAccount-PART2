@@ -3,9 +3,19 @@ package registrationloginaccount;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
+import java.nio.file.Path;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 public class MessageTest {
 
+    @TempDir
+    Path tempFolder;
+
+    @BeforeEach
+    public void useTempJsonFile() {
+        Message.setStorageFile(tempFolder.resolve("storedMessages.json").toString());
+    }
     // ---------- Message length ----------
     @Test
     public void testMessageLengthSuccess() {

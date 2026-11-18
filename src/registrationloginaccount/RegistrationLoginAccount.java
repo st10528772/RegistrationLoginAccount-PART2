@@ -5,6 +5,7 @@
 package registrationloginaccount;
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class RegistrationLoginAccount {
 
@@ -83,7 +84,7 @@ public class RegistrationLoginAccount {
             System.out.println(user.returnLoginStatus());
 
             if (loggedIn) {
-                runQuickChat(inputDevice);
+                runQuickChat(inputDevice, user.getCellPhoneNumber());
             }
         } else {
             System.out.println();
@@ -107,9 +108,10 @@ public class RegistrationLoginAccount {
     }
 
     // QuickChat menu, only reached after a successful login
-    private static void runQuickChat(Scanner inputDevice) {
+    private static void runQuickChat(Scanner inputDevice, String senderCell) {
         System.out.println();
         System.out.println("Welcome to QuickChat.");
+        Message.loadStoredMessages(); // read the JSON file into the stored array
         int howMany = 0;
         while (howMany < 1) {
             howMany = readInt(inputDevice, "How many messages do you wish to enter?");
@@ -122,6 +124,7 @@ public class RegistrationLoginAccount {
             System.out.println("1) Send Messages");
             System.out.println("2) Show recently sent messages");
             System.out.println("3) Quit");
+            System.out.println("4) Stored Messages");
             choice = readInt(inputDevice, "Choose an option:");
 
             if (choice == 1) {
@@ -132,11 +135,65 @@ public class RegistrationLoginAccount {
                     messagesDone = true;
                 }
             } else if (choice == 2) {
-                System.out.println("Coming Soon.");
+                String recent = Message.printMessages();
+                if (recent.isEmpty()) {
+                    System.out.println("No messages have been sent yet.");
+                } else {
+                    System.out.println(recent);
+                }
             } else if (choice == 3) {
                 System.out.println("Goodbye.");
+            } else if (choice == 4) {
+                storedMessagesMenu(inputDevice, senderCell);
             } else {
-                System.out.println("Invalid option. Please choose 1, 2 or 3.");
+                System.out.println("Invalid option. Please choose 1, 2, 3 or 4.");
+            }
+        }
+    }
+
+    // Part 3: menu that works on the stored messages array
+    private static void storedMessagesMenu(Scanner inputDevice, String senderCell) {
+        int option = -1;
+        while (option != 0) {
+            System.out.println();
+            System.out.println("STORED MESSAGES");
+            System.out.println("1) Display sender and recipient of all stored messages");
+            System.out.println("2) Display the longest stored message");
+            System.out.println("3) Search for a message ID");
+            System.out.println("4) Search for all messages stored for a recipient");
+            System.out.println("5) Delete a message using its message hash");
+            System.out.println("6) Display report of all stored messages");
+            System.out.println("0) Back to main menu");
+            option = readInt(inputDevice, "Choose an option:");
+
+            if (option == 1) {
+                System.out.println(Message.displaySenderAndRecipient(senderCell));
+            } else if (option == 2) {
+                System.out.println(Message.displayLongestMessage());
+            } else if (option == 3) {
+                System.out.println("Enter the message ID:");
+                System.out.println(Message.searchByMessageID(inputDevice.nextLine().trim()));
+            } else if (option == 4) {
+                System.out.println("Enter the recipient's cell number:");
+                ArrayList<String> found = Message.searchByRecipient(inputDevice.nextLine().trim());
+                if (found.isEmpty()) {
+                    System.out.println("No stored messages for that recipient.");
+                }
+                for (int i = 0; i < found.size(); i++) {
+                    System.out.println("\"" + found.get(i) + "\"");
+                }
+            } else if (option == 5) {
+                System.out.println("Enter the message hash:");
+                System.out.println(Message.deleteByMessageHash(inputDevice.nextLine().trim()));
+            } else if (option == 6) {
+                String report = Message.displayStoredReport();
+                if (report.isEmpty()) {
+                    System.out.println("There are no stored messages.");
+                } else {
+                    System.out.println(report);
+                }
+            } else if (option != 0) {
+                System.out.println("Invalid option. Please choose 0 to 6.");
             }
         }
     }
